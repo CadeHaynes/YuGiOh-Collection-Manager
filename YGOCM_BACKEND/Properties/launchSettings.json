@@ -11,7 +11,7 @@
     "https": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "http://localhost:5164/swagger",
+      "launchUrl": "https://localhost:7179/swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
