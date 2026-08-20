@@ -3,7 +3,7 @@
     public class YgoProDeckCard
     {
         public string Name { get; set; }
-        public string Id { get; set; }
+        public int Id { get; set; }
         public string Type { get; set; }
         public string Desc { get; set; }
 

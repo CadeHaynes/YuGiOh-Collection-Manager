@@ -29,6 +29,8 @@ namespace YGOCM_BACKEND.Services
 
             string content = await response.Content.ReadAsStringAsync();
 
+            Console.WriteLine(content);
+
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var result = JsonSerializer.Deserialize<YgoProDeckResponse>(content, options);
 

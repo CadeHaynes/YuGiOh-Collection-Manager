@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 
 using YGOCM_BACKEND.Entities;
+using YGOCM_BACKEND.Services;
+using YGOCM_BACKEND.DTOs;
 
 namespace YGOCM_BACKEND.Controllers
 {
@@ -11,10 +13,12 @@ namespace YGOCM_BACKEND.Controllers
     {
         // Database reference
         readonly AppDbContext _context;
+        readonly YgoProDeckService _ypdService;
 
-        public CardController(AppDbContext context)
+        public CardController(AppDbContext context, YgoProDeckService ypdService)
         {
             _context = context;
+            _ypdService = ypdService;
         }
 
         // HTTP Calls
@@ -22,6 +26,12 @@ namespace YGOCM_BACKEND.Controllers
         public async Task<ActionResult<IEnumerable<Card>>> GetCards()
         {
             return await _context.Cards.ToListAsync();
+        }
+
+        [HttpGet("{name}")] // GET a specific card from the API by name, using the service
+        public async Task<ActionResult<YgoProDeckCard?>> GetCardByNameFromAPI(string name)
+        {
+            return await _ypdService.GetCardAsync(name);
         }
     }
 }

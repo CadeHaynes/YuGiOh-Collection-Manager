@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using YGOCM_BACKEND;
+using YGOCM_BACKEND.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddHttpClient<YgoProDeckService>();
 
 builder.Services.AddDbContext<AppDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("YGOCM_DB")));
 
