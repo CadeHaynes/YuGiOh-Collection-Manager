@@ -28,7 +28,21 @@ namespace YGOCM_BACKEND.Controllers
             return await _context.Cards.ToListAsync();
         }
 
-        [HttpGet("{name}")] // GET a specific card from the API by name, using the service
+        [HttpGet("{id}")] // GET a specific card from the database by id
+        public async Task<ActionResult<Card?>> GetCardByIdFromDB(int id)
+        {
+            return await _context.Cards.FindAsync(id);
+        }
+
+        [HttpGet("/db/{name}")] // GET a specific card from the database by name
+        public async Task<ActionResult<Card?>> GetCardByNameFromDB(string name)
+        {
+            var card = _context.Cards.Any(c => c.Name == name);
+
+            return await _context.Cards.FindAsync(name);
+        }
+
+        [HttpGet("/ypd/{name}")] // GET a specific card from the API by name, using the service
         public async Task<ActionResult<YgoProDeckCard?>> GetCardByNameFromAPI(string name)
         {
             return await _ypdService.GetCardAsync(name);
