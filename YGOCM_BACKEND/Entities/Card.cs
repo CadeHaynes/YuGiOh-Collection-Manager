@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string YgoProId { get; set; }
+        public int YgoProId { get; set; }
         public string CardType { get; set; }
         public string Description { get; set; }
 
