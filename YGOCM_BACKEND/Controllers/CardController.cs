@@ -82,5 +82,15 @@ namespace YGOCM_BACKEND.Controllers
 
             return CreatedAtAction(nameof(GetCardByIdFromDB), new { id = dbCard.Id }, dbCard);
         }
+
+        [HttpDelete] // DELETE all cards from the database
+        public async Task<IActionResult> ClearDb()
+        {
+            _context.Cards.RemoveRange(_context.Cards);
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
