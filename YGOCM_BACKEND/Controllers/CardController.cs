@@ -33,5 +33,40 @@ namespace YGOCM_BACKEND.Controllers
         {
             return await _ypdService.GetCardAsync(name);
         }
+
+        [HttpPost] // POST a specific card from the API to the database
+        public async Task<ActionResult<YgoProDeckCard?>> PostCardFromAPI(string name)
+        {
+            var card = await _ypdService.GetCardAsync(name);
+
+            if (card == null)
+            {
+                return NotFound();
+            }
+
+            if (await _context.Cards.AnyAsync(c => c.Name == card.Name))
+            {
+                return BadRequest();
+            }
+
+            var dbCard = new Card
+            {
+                Name = card.Name,
+                YgoProId = card.Id,
+                CardType = card.Type,
+                MonsterType = card.Race,
+                MonsterAttribute = card.Attribute,
+                MonsterLevel = card.Level,
+                MonsterAttack = card.Atk,
+                MonsterDefense = card.Def,
+                Description = card.Desc
+                //Image = card.Image
+            };
+
+            _context.Cards.Add(dbCard);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetCardByIdFromDB), new { id = dbCard.Id }, dbCard);
+        }
     }
 }
