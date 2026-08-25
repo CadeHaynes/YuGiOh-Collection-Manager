@@ -28,8 +28,8 @@ namespace YGOCM_BACKEND.Controllers
             return await _ypdService.GetCardAsync(name);
         }
 
-        [HttpPost("{name}")] // POST a specific card from the API to the database
-        public async Task<ActionResult<YgoProDeckCard?>> PostCardFromAPI(string name)
+        [HttpPost("name/{name}")] // POST a specific card from the API to the database
+        public async Task<ActionResult<YgoProDeckCard>> PostCardFromAPI(string name)
         {
             var card = await _ypdService.GetCardAsync(name);
 
@@ -61,6 +61,43 @@ namespace YGOCM_BACKEND.Controllers
             await _context.SaveChangesAsync();
 
             return card;
+        }
+
+        [HttpPost("count/{count}")] // POST a specific card from the API to the database
+        public async Task<ActionResult<IEnumerable<YgoProDeckCard>>> PostXCardsFromAPI(int count)
+        {
+            var cards = await _ypdService.GetXCardsAsync(count);
+
+            if (cards == null)
+            {
+                return NotFound();
+            }
+
+            foreach (var card in cards)
+            {
+                if (!await _context.Cards.AnyAsync(c => c.Name == card.Name))
+                {
+                    var dbCard = new Card
+                    {
+                        Name = card.Name,
+                        YgoProId = card.Id,
+                        CardType = card.Type,
+                        MonsterType = card.Race,
+                        MonsterAttribute = card.Attribute,
+                        MonsterLevel = card.Level,
+                        MonsterAttack = card.Atk,
+                        MonsterDefense = card.Def,
+                        Description = card.Desc
+                        //Image = card.Image
+                    };
+
+                    _context.Cards.Add(dbCard);
+                }
+            }
+            
+            await _context.SaveChangesAsync();
+
+            return cards.ToList<YgoProDeckCard>();
         }
     }
 }

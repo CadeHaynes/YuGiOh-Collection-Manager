@@ -19,7 +19,7 @@ namespace YGOCM_BACKEND.Services
             _httpClient = httpClient;
         }
 
-        // Testing only: pull a single card from the YGOProDeck API
+        // Pulls a single card from the YGOProDeck API
         public async Task<YgoProDeckCard?> GetCardAsync(string cardName)
         {
             var url = $"https://db.ygoprodeck.com/api/v7/cardinfo.php?name={Uri.EscapeDataString(cardName)}";
@@ -29,12 +29,28 @@ namespace YGOCM_BACKEND.Services
 
             string content = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine(content);
+            //Console.WriteLine(content);
 
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var result = JsonSerializer.Deserialize<YgoProDeckResponse>(content, options);
 
             return result?.Data.FirstOrDefault();
+        }
+
+        // Pulls the first X cards from the YGOProDeck API
+        public async Task<IEnumerable<YgoProDeckCard>?> GetXCardsAsync(int count)
+        {
+            var url = $"https://db.ygoprodeck.com/api/v7/cardinfo.php";
+
+            var response = await _httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+
+            string content = await response.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var result = JsonSerializer.Deserialize<YgoProDeckResponse>(content, options);
+
+            return result?.Data.Take(count);
         }
     }
 }
