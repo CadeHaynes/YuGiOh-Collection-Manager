@@ -37,8 +37,8 @@ namespace YGOCM_BACKEND.Services
             return result?.Data.FirstOrDefault();
         }
 
-        // Pulls the first X cards from the YGOProDeck API
-        public async Task<IEnumerable<YgoProDeckCard>?> GetXCardsAsync(int count)
+        // Pulls the first X cards from the YGOProDeck API, if X is not specified (or negative), all cards are returned
+        public async Task<IEnumerable<YgoProDeckCard>?> GetXCardsAsync(int count = -1)
         {
             var url = $"https://db.ygoprodeck.com/api/v7/cardinfo.php";
 
@@ -50,7 +50,14 @@ namespace YGOCM_BACKEND.Services
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var result = JsonSerializer.Deserialize<YgoProDeckResponse>(content, options);
 
-            return result?.Data.Take(count);
+            if (count < 0)
+            {
+                return result?.Data;
+            }
+            else
+            {
+                return result?.Data.Take(count);
+            }
         }
     }
 }
