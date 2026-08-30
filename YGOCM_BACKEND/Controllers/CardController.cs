@@ -33,6 +33,11 @@ namespace YGOCM_BACKEND.Controllers
         }
 
         [HttpGet("ygopro_id/{id}")] // GET a specific card from the database by its ygoProId
+        public async Task<ActionResult<Card?>> GetCardByYgoProId(int id)
+        {
+            return await _context.Cards.FirstOrDefaultAsync(c => c.YgoProId == id);
+        }
+
         [HttpGet("name/{name}")] // GET a specific card from the database by name
         public async Task<ActionResult<Card?>> GetCardByName(string name)
         {
