@@ -63,9 +63,10 @@ namespace YGOCM_BACKEND.Controllers
             return card;
         }
 
-        [HttpPost("count/{count}")] // POST a specific card from the API to the database
-        public async Task<ActionResult<IEnumerable<YgoProDeckCard>>> PostXCardsFromAPI(int count)
+        [HttpPost("count/{count}")] // POST a specific card from the API to the database, no value posts all cards from the API.
+        public async Task<ActionResult<IEnumerable<YgoProDeckCard>>> PostXCardsFromAPI(int count = -1)
         {
+            // Negative value posts all cards (sets count to -1 if it is null)
             var cards = await _ypdService.GetXCardsAsync(count);
 
             if (cards == null)
