@@ -26,6 +26,33 @@ namespace YGOCM_BACKEND.Controllers
             return await _context.Cards.ToListAsync();
         }
 
+        [HttpGet("filtered")] // GET filtered cards in the database
+        public async Task<ActionResult<IEnumerable<Card>>> GetFilteredMonsterCards(
+            string? type,
+            string? attribute,
+            int? level
+            )
+        {
+            var cards = _context.Cards.AsQueryable();
+
+            if (type != null)
+            {
+                cards = cards.Where(c => c.MonsterType == type);
+            }
+
+            if (attribute != null)
+            {
+                cards = cards.Where(c => c.MonsterAttribute == attribute);
+            }
+
+            if (level != null)
+            {
+                cards = cards.Where(c => c.MonsterLevel == level);
+            }
+
+            return await cards.ToListAsync();
+        }
+
         [HttpGet("id/{id}")] // GET a specific card from the database by id
         public async Task<ActionResult<Card?>> GetCardById(int id)
         {
@@ -49,7 +76,7 @@ namespace YGOCM_BACKEND.Controllers
             }
 
             return card.Result;
-        } 
+        }       
 
         [HttpDelete] // DELETE all cards from the database
         public async Task<IActionResult> ClearDb()
