@@ -38,9 +38,14 @@ namespace YGOCM_BACKEND.Controllers
                 return NotFound("Card not found");
             }
 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            var card = await _context.Cards.FirstOrDefaultAsync(c => c.Id == cardId);
+
             var entry = new CollectionEntry
             {
+                User = user,
                 UserId = userId,
+                Card = card,
                 CardId = cardId,
                 Quantity = quantity
             };
