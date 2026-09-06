@@ -66,16 +66,16 @@ namespace YGOCM_BACKEND.Controllers
         }
 
         [HttpGet("name/{name}")] // GET a specific card from the database by name
-        public async Task<ActionResult<Card?>> GetCardByName(string name)
+        public async Task<ActionResult<IEnumerable<Card?>>> GetCardsByName(string name)
         {
-            var card = _context.Cards.FirstOrDefaultAsync(c => c.Name.ToLower() == name.ToLower());
+            var card = _context.Cards.Where(c => c.Name.ToLower().Contains(name.ToLower()));
 
             if (card == null)
             {
                 return NotFound();
             }
 
-            return card.Result;
+            return card.ToList();
         }       
 
         [HttpDelete] // DELETE all cards from the database
