@@ -22,7 +22,11 @@ namespace YGOCM_BACKEND.Controllers
         [HttpGet("user/{id}")] // GET a specific user's collection entry from the database by their id
         public async Task<ActionResult<IEnumerable<CollectionEntry>>> GetCollectionByUserId(int id)
         {
-            return await _context.CollectionEntries.Where(c => c.UserId == id).ToListAsync();
+            return await _context.CollectionEntries
+                .Where(c => c.UserId == id)
+                .Include(c => c.User)
+                .Include(c => c.Card)
+                .ToListAsync();
         }
 
         [HttpPost] // POST a new collection entry to the database
