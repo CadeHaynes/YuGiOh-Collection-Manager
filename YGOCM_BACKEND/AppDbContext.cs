@@ -19,10 +19,10 @@ namespace YGOCM_BACKEND
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // CollectionEntry has one User, with Users having many CollectionEntries
-            modelBuilder.Entity<CollectionEntry>()
+            /*modelBuilder.Entity<CollectionEntry>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Collection)
-                .HasForeignKey(c => c.UserId);
+                .HasForeignKey(c => c.UserId);*/
 
             // CollectionEntry has one Card, and Cards can be referenced by many CollectionEntries
             modelBuilder.Entity<CollectionEntry>()

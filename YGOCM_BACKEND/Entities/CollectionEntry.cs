@@ -1,4 +1,6 @@
-﻿namespace YGOCM_BACKEND.Entities
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace YGOCM_BACKEND.Entities
 {
     public class CollectionEntry
     {
@@ -10,7 +12,6 @@
         public Card Card { get; set; }
 
         // User information - owned by a User entity
-        public int UserId { get; set; }
-        public User User { get; set; }
+        public string UserId { get; set; }
     }
 }
